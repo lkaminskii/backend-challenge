@@ -105,6 +105,9 @@
 					</execution>
 				</executions>
 				<configuration>
+					<argLine>
+						--add-opens java.base/java.lang=ALL-UNNAMED
+					</argLine>
 					<testSourceDirectory>${config.dir.test.source}</testSourceDirectory>
 					<failIfNoTests>false</failIfNoTests>
 				</configuration>

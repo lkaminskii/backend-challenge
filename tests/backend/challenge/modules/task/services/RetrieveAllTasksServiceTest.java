@@ -1,31 +1,50 @@
 package backend.challenge.modules.task.services;
 
+import backend.challenge.modules.task.models.Task;
 import backend.challenge.modules.task.repositories.ITaskRepository;
-import backend.challenge.modules.task.repositories.TaskRepository;
-import kikaha.core.test.KikahaRunner;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
-@RunWith( KikahaRunner.class )
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
+
+@RunWith(MockitoJUnitRunner.class)
 public class RetrieveAllTasksServiceTest {
 
-	private IRetrieveAllTasksService retrieveAllTasksService;
+	@InjectMocks
+	private RetrieveAllTasksService retrieveAllTasksService;
+
+	@Mock
+	private ITaskRepository taskRepository;
 
 	@Before
-	public void init() {
-		final ITaskRepository taskRepository = new TaskRepository();
+	public void setUp() {
+		Task task1 = new Task();
+		task1.setTitle("Task 1");
+		task1.setDescription("Description 1");
 
-		retrieveAllTasksService = new RetrieveAllTasksService(taskRepository);
+		Task task2 = new Task();
+		task2.setTitle("Task 2");
+		task2.setDescription("Description 2");
+
+		List<Task> tasks = Arrays.asList(task1, task2);
+
+		when(taskRepository.show()).thenReturn(tasks);
 	}
 
 	@Test
 	public void shouldBeAbleToListTheTasks() {
-		/*
-			TODO: Para que esse teste passe, sua aplicação deve permitir que seja
-					  retornado um array com todas as tarefas que foram criadas até o momento.
-		*/
-	}
+		List<Task> tasks = retrieveAllTasksService.execute();
 
+		assertEquals(2, tasks.size());
+		assertEquals("Task 1", tasks.get(0).getTitle());
+		assertEquals("Task 2", tasks.get(1).getTitle());
+	}
 }

@@ -1,5 +1,6 @@
 package backend.challenge.modules.task.infra.http.controllers;
 
+import backend.challenge.modules.task.dtos.TaskDTO;
 import backend.challenge.modules.task.infra.http.views.TaskView;
 import backend.challenge.modules.task.models.Task;
 import backend.challenge.modules.task.services.*;
@@ -7,6 +8,7 @@ import kikaha.urouting.api.*;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.UUID;
 
 @Singleton
 @Path("tasks")
@@ -33,24 +35,18 @@ public class TaskController {
 
 	@GET
 	public Response show() {
-		// TODO: Rota que lista todas as tarefas
-
-		return DefaultResponse.ok().entity("Hello world");
+		return DefaultResponse.ok().entity(retrieveAllTasksService.execute());
 	}
 
 	@GET
 	@Path("single/{taskId}")
-	public Response index(@PathParam("taskId") Long taskId) {
-		// TODO: A rota deve retornar somente a tarefa a qual o id corresponder
-
-		return DefaultResponse.ok().entity("Hello world");
+	public Response index(@PathParam("taskId") UUID taskId) {
+		return DefaultResponse.ok().entity(retrieveTaskByIdService.execute(taskId));
 	}
 
 	@POST
-	public Response create(TaskView task) {
-		// TODO: A rota deve receber title e description, sendo o `title` o título da tarefa e `description` uma descrição da tarefa.
-
-		return DefaultResponse.ok().entity("Hello world");
+	public Response create(TaskDTO taskDTO) {
+		return DefaultResponse.ok().entity(createTaskService.execute(taskDTO));
 	}
 
 	@PUT
@@ -66,10 +62,9 @@ public class TaskController {
 
 	@DELETE
 	@Path("single/{taskId}")
-	public Response delete(@PathParam("taskId") Long taskId) {
-		// TODO: A rota deve deletar a tarefa com o id correspondente nos parâmetros da rota
+	public Response delete(@PathParam("taskId") UUID taskId) {
 
-		return DefaultResponse.ok().entity("Hello world");
+		return DefaultResponse.ok().entity("");
 	}
 
 }
